@@ -175,23 +175,31 @@ namespace ProgForAdmin
 
 
             var cabinet = comboBox1.SelectedIndex;
-            var cabinetID = savedCabID[cabinet];
-            SqlConnection con = new SqlConnection("Data Source=exPC; Initial Catalog=EbaTest2; Integrated Security=True");
-            con.Open();
-            SqlDataAdapter da = new SqlDataAdapter($"Select Врач.ID_Врача,Кабинет.ID_Кабинета,[Номер кабинета],ФИО,Специальность from Кабинет_Врач inner join Врач on Врач.ID_Врача = Кабинет_Врач.ID_Врача inner join Кабинет on Кабинет.ID_Кабинета =  Кабинет_Врач.ID_Кабинета where  Кабинет.ID_Кабинета = '{cabinetID}'", con);
-            SqlCommandBuilder cb = new SqlCommandBuilder(da);
-            DataSet ds = new DataSet();
+            try 
+            {
+                var cabinetID = savedCabID[cabinet];
+                SqlConnection con = new SqlConnection("Data Source=exPC; Initial Catalog=EbaTest2; Integrated Security=True");
+                con.Open();
+                SqlDataAdapter da = new SqlDataAdapter($"Select Врач.ID_Врача,Кабинет.ID_Кабинета,[Номер кабинета],ФИО,Специальность from Кабинет_Врач inner join Врач on Врач.ID_Врача = Кабинет_Врач.ID_Врача inner join Кабинет on Кабинет.ID_Кабинета =  Кабинет_Врач.ID_Кабинета where  Кабинет.ID_Кабинета = '{cabinetID}'", con);
+                SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                DataSet ds = new DataSet();
 
 
-            da.Fill(ds);
-            dataGridView2.DataSource = ds.Tables[0];
-            this.dataGridView2.Columns["ID_Кабинета"].Visible = false;
-            this.dataGridView2.Columns["ID_Врача"].Visible = false;
+                da.Fill(ds);
+                dataGridView2.DataSource = ds.Tables[0];
+                this.dataGridView2.Columns["ID_Кабинета"].Visible = false;
+                this.dataGridView2.Columns["ID_Врача"].Visible = false;
+               
+            }
+            catch (Exception e)
+            {
+                
+            }
+
+
+
+
             return true;
-           
-
-
-
         }
         private bool AddTableCabinets()
         {
@@ -392,20 +400,17 @@ namespace ProgForAdmin
             AddTableCabinets();
             comboBox1.SelectedItem = null;
             CabinetsComboBox();
-
-
-
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             cabinetsDelete();
             AddTableCabinets();
-           
             comboBox1.SelectedItem = null;
             comboBox1.Text= "";
             CabinetsComboBox();
-
+            AddTable();
+            this.dataGridView2.Rows.Clear();
 
         }
 
